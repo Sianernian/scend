@@ -5,3 +5,10 @@ type Person struct {
 	Age int
 	Sex string
 }
+
+type Info struct{
+	Name string
+	Birthday string
+	Address string
+	Nick string
+}

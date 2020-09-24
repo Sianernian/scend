@@ -65,26 +65,49 @@ func (c *MainController) Get() {
 //}
 
 
+//func (c *MainController)Post(){
+//	//1. 解析 前端 json 格式
+//
+//	var person models.Person
+//                            // 读取数据  字节切片
+//	dataByte , err :=ioutil.ReadAll(c.Ctx.Request.Body)
+//
+//	if err !=nil {
+//		c.Ctx.WriteString("解析错误")
+//		return
+//	}
+//	                    // 字节切片
+//	err =json.Unmarshal(dataByte,&person) //从前端上解析 json
+//	if err !=nil{
+//		c.Ctx.WriteString("失败")
+//		return
+//	}
+//	fmt.Println("姓名",person.Name)
+//	fmt.Println("年龄",person.Age)
+//	fmt.Println("性别",person.Sex)
+//	c.Ctx.WriteString("成功")
+//
+//}
+
 func (c *MainController)Post(){
-	//1. 解析 前端 json 格式
-
-	var person models.Person
-                            // 读取数据  字节切片
+	// 解析前端 json 数据
+	var info models.Info
+	     // 读取数据
 	dataByte , err :=ioutil.ReadAll(c.Ctx.Request.Body)
-
-	if err !=nil {
-		c.Ctx.WriteString("解析错误")
-		return
-	}
-	                    // 字节切片
-	err =json.Unmarshal(dataByte,&person) //从前端上解析 json
 	if err !=nil{
 		c.Ctx.WriteString("失败")
 		return
 	}
-	fmt.Println("姓名",person.Name)
-	fmt.Println("年龄",person.Age)
-	fmt.Println("性别",person.Sex)
+
+	err =json.Unmarshal(dataByte,&info) // 解析json
+	if err !=nil{
+		c.Ctx.WriteString("失败")
+		return
+	}
+	fmt.Println("姓名：",info.Name)
+	fmt.Println("生日：",info.Birthday)
+	fmt.Println("地址：",info.Address)
+	fmt.Println("昵称：",info.Nick)
 	c.Ctx.WriteString("成功")
 
 }
