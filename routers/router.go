@@ -8,3 +8,7 @@ import (
 func init() {
     beego.Router("/register", &controllers.MainController{})
 }
+
+func INIT (){
+	beego.Router("/",&controllers.From{})
+}

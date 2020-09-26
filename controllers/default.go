@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"BeegoProject123/db_mysql"
 	"BeegoProject123/models"
 	"encoding/json"
 	"fmt"
@@ -21,6 +22,7 @@ type MainController struct {
 func (c *MainController) Get() {
 
 	// 1. 获取请求数据
+	c.GetString("user") // 返回字符串
 	usre :=c.Ctx.Input.Query("user")
 	pwd := c.Ctx.Input.Query("pwd")
 
@@ -87,27 +89,50 @@ func (c *MainController) Get() {
 //	fmt.Println("性别",person.Sex)
 //	c.Ctx.WriteString("成功")
 //
-//}
+//0-
 
 func (c *MainController)Post(){
+	fmt.Println(c == nil)
+	fmt.Println(c.Ctx == nil)
+	fmt.Println(c.Ctx.Request == nil)
+
 	// 解析前端 json 数据
-	var info models.Info
+
 	     // 读取数据
 	dataByte , err :=ioutil.ReadAll(c.Ctx.Request.Body)
 	if err !=nil{
 		c.Ctx.WriteString("失败")
 		return
 	}
+	var info models.Info
 
 	err =json.Unmarshal(dataByte,&info) // 解析json
 	if err !=nil{
 		c.Ctx.WriteString("失败")
 		return
 	}
-	fmt.Println("姓名：",info.Name)
-	fmt.Println("生日：",info.Birthday)
-	fmt.Println("地址：",info.Address)
-	fmt.Println("昵称：",info.Nick)
+	//fmt.Println("姓名：",info.Name)
+	//fmt.Println("生日：",info.Birthday)
+	//fmt.Println("地址：",info.Address)
+	//fmt.Println("昵称：",info.Nick)
+
+	id ,err :=db_mysql.InserUser(info)
+	if err !=nil{
+		fmt.Println(err.Error())
+		c.Ctx.WriteString("错误")
+		return
+	}
+	fmt.Println(id)
+
+
+	result :=models.ResponseResult{
+		Code:    0,
+		Message: "成功",
+		Data:    nil,
+	}
+	c.Data["json"] = &result
+	c.ServeJSON()
+
 	c.Ctx.WriteString("成功")
 
 }
